@@ -7,7 +7,8 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
-const mainUI = require("./controller/routes/mainui");
+const mainUI = require("./controller/mainui");
+const users = require('./controller/users');
 
 const PORT = 3000;
 const URI = "localhost";
@@ -26,6 +27,7 @@ app.use(
 ); // 세션id사용전에는 발급금지
 
 app.use("/", mainUI);
+app.use('/users', users);
 
 app.listen(PORT, () => {
   console.log("============================");
