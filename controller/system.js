@@ -11,6 +11,13 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio.listen(server);
 
+const mysql = require("mysql");
+const db = mysql.createConnection({
+  host: "localhost", // DB서버 IP주소
+  user: "root", // DB접속 아이디
+  password: "1234", // DB암호
+  database: "greenlight" //사용할 DB명
+});
 
 let road1_1 = 0;
 let road1_2 = 0;
@@ -20,6 +27,16 @@ let road3_1 = 0;
 let road3_2 = 0;
 let road4_1 = 0;
 let road4_2 = 0;
+
+let pattern = new Array();
+let pattern1 = 0;
+let pattern2 = 0;
+let pattern3 = 0;
+let pattern4 = 0;
+let pattern5 = 0;
+let pattern6 = 0;
+let pattern7 = 0;
+let pattern8 = 0;
 
 const SystemerrorUI = (req, res) => {
   if (req.session.auth) {
@@ -132,6 +149,13 @@ const systemcontrol = (req, res) => {
   console.log("메시지 : " + msg);
   res.redirect("/system/systemcontrol");
   controlsignal(msg);
+};
+
+const settime = (req, res) => {
+  let body = req.body;
+  let time = body.time;
+  console.log("time : " + time);
+  res.redirect("/system/systemcontrol");
 };
 
 const controlsignal = function(msg) {
@@ -413,18 +437,40 @@ const controlsignal = function(msg) {
     road4_1 = CheckRoad4_1();
     road4_2 = CheckRoad4_2();
 
-    console.log("road 1 직진차량   : " + road1_1);
-    console.log("road 1 좌회전차량 : " + road1_2);
-    console.log("road 2 직진차량   : " + road2_1);
-    console.log("road 2 좌회전차량 : " + road2_2);
-    console.log("road 3 직진차량   : " + road3_1);
-    console.log("road 3 좌회전차량 : " + road3_2);
-    console.log("road 4 직진차량   : " + road4_1);
-    console.log("road 4 우회전차량 : " + road4_2);
+    // console.log("road 1 직진차량   : " + road1_1);
+    // console.log("road 1 좌회전차량 : " + road1_2);
+    // console.log("road 2 직진차량   : " + road2_1);
+    // console.log("road 2 좌회전차량 : " + road2_2);
+    // console.log("road 3 직진차량   : " + road3_1);
+    // console.log("road 3 좌회전차량 : " + road3_2);
+    // console.log("road 4 직진차량   : " + road4_1);
+    // console.log("road 4 좌회전차량 : " + road4_2);
+    // console.log("------------");
+
+    pattern[0] = road2_1 + road4_1;
+    pattern[1] = road1_1 + road3_1;
+    pattern[2] = road2_1 + road2_2;
+    pattern[3] = road3_1 + road3_2;
+    pattern[4] = road1_1 + road1_2;
+    pattern[5] = road4_1 + road4_2;
+    pattern[6] = road2_2 + road4_2;
+    pattern[7] = road1_2 + road3_2;
+
+    for(let i=0;i<8;i++){
+      console.log(" 행시 "+i+" : " + pattern[i]);
+    }
     console.log("------------");
-    io.on('connection', function(){
-        io.sockets.emit("road1_1", road1_1);
-    })
+
+    for (let i = 0; i < 8; i++) {
+      //sql_str = "UPDATE road SET  count = "+ pattern[i] +" WHERE road_id = "+ (i+1) +";";
+      console.log("SQL: " + sql_str);
+      db.query(sql_str, (error, results, fields) => {
+        if (error) {
+          console.log("PATTERN UPATE ERROR !!")
+        }
+      });
+    }
+    console.log("pattern UPDATE 완료!!")
     timeid = setTimeout(CheckLight, 2000);
   };
 
@@ -472,6 +518,7 @@ router.get("/systemerror", SystemerrorUI);
 router.get("/monitoring", MonitoringUI);
 router.get("/systemcontrol", systemcontrolUI);
 router.post("/systemcontrol", systemcontrol);
+router.post("/time", settime);
 
 // 외부로 뺍니다.
 module.exports = router;
