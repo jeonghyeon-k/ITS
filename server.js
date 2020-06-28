@@ -17,6 +17,10 @@ const URI = "http://192.168.219.177";
 app.set("views", path.join(__dirname, "views")); // views경로 설정
 app.set("view engine", "ejs"); // view엔진 지정
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static("public"));
+app.use('/users/auth',express.static("public"));
+app.use('/system/systemcontrol',express.static("public"));
+app.use('/system/monitoring',express.static("public"));
 app.use(express.json());
 app.use(
   session({
@@ -27,24 +31,16 @@ app.use(
   })
 ); // 세션id사용전에는 발급금지
 
-app.set('socketio', io); //socket
 
 app.use("/", mainUI);
 app.use('/users', users);
 app.use('/system',system);
 
-const server = app.listen(PORT, () => {
+
+var server = app.listen(PORT, () => {
   console.log("============================");
   console.log(" 신호등제어시스템 웹 서버 ");
   console.log(" 웹브라우저접속주소 : " + URI + ":" + PORT);
   console.log("============================");
 });
-
-var listen = require('socket.io')
-var io = listen(server);
-io.on('connect',function(socket){
-    socket.on('client message', function(data){
-        io.emit('server message', data.message);
-    });
-})
 

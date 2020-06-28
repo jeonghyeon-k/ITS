@@ -8,53 +8,63 @@
         <br><br><br>
         <h3>감지센서 </h3>
         <hr>
-        <form name=buy  onsubmit="start()" method=post action="/system/systemcontrol">
+        <form name=buy onsubmit="start()" method=post action="/system/systemcontrol">
             <input type="hidden" name="msg" id="msg" value="startmsg">
             <input style='float: left;' type="submit" class="btn btn-primary" value="시작하기">
         </form>
-        <form name=buy method=post onsubmit="stop()"acation="/system/systemcontrol">
+        <form name=buy method=post onsubmit="stop()" acation="/system/systemcontrol">
             <input type="hidden" name="msg" id="msg" value="stopmsg">
-            <input style='float: left; margin-left: 4px' type="submit" class="btn btn-primary"
-                value="종료하기">
+            <input style='float: left; margin-left: 4px' type="submit" class="btn btn-primary" value="종료하기">
         </form>
         <br>
         <br>
     </div>
 
-    <form name=join method=post action="/system/time">
-        <div class="boxboxboxbox" style='width:300px;'>
+
+    <div>
+        <div class="boxboxboxbox" style='display: inline-block; width:300px;'>
             <h3>수동 시간제어</h3>
             <hr>
             <label> ※ 빈칸 시 기본 시간 5초 ※ </label>
             <div>
-                <div class="form-group">
-                    패턴 1 시간 : <input name="time1" class="form-control" id="time1" placeholder="초 단위로 입력하세요">
+                <div style='float: left;'>
+                    <form name=join method=post action="/system/time">
+                        <div class="form-group">
+                            1현시 시간 : <input name="time1" class="form-control" id="time1" placeholder="초 단위로 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            2현시 시간 : <input name="time2" class="form-control" id="time2" placeholder="초 단위로 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            3현시 시간 : <input name="time3" class="form-control" id="time3" placeholder="초 단위로 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            4현시 시간 : <input name="time4" class="form-control" id="time4" placeholder="초 단위로 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            5현시 시간 : <input name="time5" class="form-control" id="time5" placeholder="초 단위로 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            6현시 시간 : <input name="time6" class="form-control" id="time6" placeholder="초 단위로 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            7현시 시간 : <input name="time7" class="form-control" id="time7" placeholder="초 단위로 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            8현시 시간 : <input name="time8" class="form-control" id="time8" placeholder="초 단위로 입력하세요">
+                        </div>
+                        <div style='width:300px; margin:auto;'>
+                            <input style='width:300px;' onclick="alert()" type="submit" class="btn btn-primary"
+                                value="시간 전송">
+                        </div>
+                    </form>
                 </div>
-                <div class="form-group">
-                    패턴 2 시간 : <input name="time2" class="form-control" id="time2" placeholder="초 단위로 입력하세요">
-                </div>
-                <div class="form-group">
-                    패턴 3 시간 : <input name="time3" class="form-control" id="time3" placeholder="초 단위로 입력하세요">
-                </div>
-                <div class="form-group">
-                    패턴 4 시간 : <input name="time4" class="form-control" id="time4" placeholder="초 단위로 입력하세요">
-                </div>
-                <div class="form-group">
-                    패턴 5 시간 : <input name="time5" class="form-control" id="time5" placeholder="초 단위로 입력하세요">
-                </div>
-                <div class="form-group">
-                    패턴 6 시간 : <input name="time6" class="form-control" id="time6" placeholder="초 단위로 입력하세요">
-                </div>
-                <div class="form-group">
-                    패턴 7 시간 : <input name="time7" class="form-control" id="time7" placeholder="초 단위로 입력하세요">
-                </div>
-                <div class="form-group">
-                    패턴 8 시간 : <input name="time8" class="form-control" id="time8" placeholder="초 단위로 입력하세요">
-                </div>
-            </div>
-            <div style='width:300px; margin:auto;'>
-                <input style='width:300px;' onclick="alert()" type="submit" class="btn btn-primary" value="시간 전송">
             </div>
         </div>
+        <div style="float: right; margin-top: 25px">
+            <img src="images/pattern.png" width="400" height="700">
+        </div>
+    </div>
+
+
 </div>
-</form>

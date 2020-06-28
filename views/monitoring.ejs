@@ -1,7 +1,17 @@
-
 <!DOCTYPE html>
+
+<script src="/socket.io/socket.io.js"> </script>
+<script>
+        var socket = io.connect('http://192.168.219.177:3000');
+        socket.on('connection', function (data) {
+                console.log("소켓연결 !! ")
+                console.log(data.msg);
+                $('#patterndata').append(data.msg)
+        })
+</script>
+
 <div class="container">
         <br><br><br>
         <h2>모니터링</h2>
+        <textarea rows="20" cols="30" id="patterndata"></textarea>
 </div>
-
