@@ -153,8 +153,36 @@ const systemcontrol = (req, res) => {
 
 const settime = (req, res) => {
   let body = req.body;
-  let time = body.time;
-  console.log("time : " + time);
+  let time = new Array();
+  time[0] = body.time1;
+  time[1] = body.time2;
+  time[2] = body.time3;
+  time[3] = body.time4;
+  time[4] = body.time5;
+  time[5] = body.time6;
+  time[6] = body.time7;
+  time[7] = body.time8;
+  for(let i = 0; i < 8; i++) {
+    if(time[i]==''){
+       time[i] =5;
+    }
+  }
+  for (let i = 0; i < 8; i++) {
+    sql_str =
+      "UPDATE road SET lighttime = " +
+      time[i] +
+      " WHERE road_id = " +
+      (i + 1) +
+      ";";
+    //console.log("SQL: " + sql_str);
+    db.query(sql_str, (error, results, fields) => {
+      if (error) {
+        console.log("light UPATE ERROR !!");
+      }else{
+        console.log("light UPATE 성공 !!");
+      }
+    });
+  }
   res.redirect("/system/systemcontrol");
 };
 
@@ -456,21 +484,26 @@ const controlsignal = function(msg) {
     pattern[6] = road2_2 + road4_2;
     pattern[7] = road1_2 + road3_2;
 
-    for(let i=0;i<8;i++){
-      console.log(" 행시 "+i+" : " + pattern[i]);
+    for (let i = 0; i < 8; i++) {
+      console.log(" 행시 " + i + " : " + pattern[i]);
     }
     console.log("------------");
 
     for (let i = 0; i < 8; i++) {
-      //sql_str = "UPDATE road SET  count = "+ pattern[i] +" WHERE road_id = "+ (i+1) +";";
-      console.log("SQL: " + sql_str);
+      sql_str =
+        "UPDATE road SET  count = " +
+        pattern[i] +
+        " WHERE road_id = " +
+        (i + 1) +
+        ";";
+      //console.log("SQL: " + sql_str);
       db.query(sql_str, (error, results, fields) => {
         if (error) {
-          console.log("PATTERN UPATE ERROR !!")
+          console.log("PATTERN UPATE ERROR !!");
         }
       });
     }
-    console.log("pattern UPDATE 완료!!")
+    console.log("pattern UPDATE 완료!!");
     timeid = setTimeout(CheckLight, 2000);
   };
 
