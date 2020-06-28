@@ -162,9 +162,9 @@ const settime = (req, res) => {
   time[5] = body.time6;
   time[6] = body.time7;
   time[7] = body.time8;
-  for(let i = 0; i < 8; i++) {
-    if(time[i]==''){
-       time[i] =5;
+  for (let i = 0; i < 8; i++) {
+    if (time[i] == "") {
+      time[i] = 5;
     }
   }
   for (let i = 0; i < 8; i++) {
@@ -178,11 +178,11 @@ const settime = (req, res) => {
     db.query(sql_str, (error, results, fields) => {
       if (error) {
         console.log("light UPATE ERROR !!");
-      }else{
-        console.log("light UPATE 성공 !!");
       }
     });
   }
+  console.log("light UPATE 성공 !!");
+
   res.redirect("/system/systemcontrol");
 };
 
