@@ -17,6 +17,8 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
+</script>
+<script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
@@ -26,7 +28,10 @@
     <div class="row align-items-center">
       <div class="col-2"><a href='/'><img src="../public/logo.png" alt="logo" height: 70px></a></div>
       <div class="col-8"> </div>
-      <div class="col-1"></div>
+      <div class="col-1">
+        <h6><small><%=reglabel%></small></h6>
+
+      </div>
       <div class="col-1"> <a href='<%=logurl%>'>
           <h6><small><%=loglabel%></small></h6>
         </a></div>

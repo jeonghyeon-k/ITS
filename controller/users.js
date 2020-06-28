@@ -1,7 +1,7 @@
 const fs = require("fs");
 const express = require("express");
 const ejs = require("ejs");
-//const mysql = require("mysql");
+const mysql = require("mysql");
 const bodyParser = require("body-parser");
 //const crypto = require("crypto");
 const session = require("express-session");
@@ -9,16 +9,13 @@ const router = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: false }));
 
-/*
+
 const db = mysql.createConnection({
   host: "localhost", // DB서버 IP주소
-  port: 3306, // DB서버 Port주소
-  user: "bmlee", // DB접속 아이디
-  password: "bmlee654321", // DB암호
-  database: "bridge" //사용할 DB명
+  user: "root", // DB접속 아이디
+  password: "1234", // DB암호
+  database: "greenlight" //사용할 DB명
 });
-*/
-
 
 // ------------------------------------  로그인기능 --------------------------------------
 
@@ -43,7 +40,6 @@ const PrintLoginForm = (req, res) => {
         title: "쇼핑몰site",
         logurl: "/users/logout",
         loglabel: "로그아웃",
-        regurl: "/users/profile",
         reglabel: req.session.who
       })
     );
@@ -53,8 +49,7 @@ const PrintLoginForm = (req, res) => {
         title: "쇼핑몰site",
         logurl: "/users/auth",
         loglabel: "로그인",
-        regurl: "/users/reg",
-        reglabel: "가입"
+        reglabel: ""
       })
     );
   }
@@ -71,21 +66,19 @@ const HandleLogin = (req, res) => {
   console.log("로그인 입력정보: %s, %s", body.uid, body.pass);
   if (body.uid == "" || body.pass == "") {
     console.log("아이디나 암호가 입력되지 않아서 로그인할 수 없습니다.");
+    
     res
       .status(562)
       .end(
         '<meta charset="utf-8">아이디나 암호가 입력되지 않아서 로그인할 수 없습니다.'
       );
   } else {
-    hashpwd = crypto
-      .createHash("sha512")
-      .update(body.pass)
-      .digest("base64");
+
     sql_str =
-      "SELECT uid, pass, name from u13_users where uid ='" +
+      "SELECT uid, pass, name from admin where uid ='" +
       body.uid +
       "' and pass='" +
-      hashpwd +
+      body.pass +
       "';";
     console.log("SQL: " + sql_str);
     db.query(sql_str, (error, results, fields) => {
@@ -113,14 +106,11 @@ const HandleLogin = (req, res) => {
             userpass = item.pass;
             username = item.name;
             console.log("DB에서 로그인성공한 ID/암호:%s/%s", userid, userpass);
-            if (body.uid == userid && hashpwd == userpass) {
+            if (body.uid == userid && item.pass == userpass) {
               req.session.auth = 99; // 임의로 수(99)로 로그인성공했다는 것을 설정함
               req.session.who = username; // 인증된 사용자명 확보 (로그인후 이름출력용)
-              req.session.pass = hashpwd;
+              req.session.pass = item.pass;
               req.session.uid = item.uid;
-              if (body.uid == "admin")
-                // 만약, 인증된 사용자가 관리자(admin)라면 이를 표시
-                req.session.admin = true;
               res.redirect("/");
             }
           }); /* foreach */
