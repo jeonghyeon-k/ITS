@@ -67,7 +67,8 @@ const SystemerrorUI = (req, res) => {
         title: "알리미",
         warn_title: "로그인 필요",
         warn_message: "관리메뉴를 사용하려면 로그인이 필요합니다.",
-        return_url: "/"
+        return_url: "/users/auth/",
+        warn_button: "로그인하기"
       })
     );
   }
@@ -91,7 +92,8 @@ const MonitoringUI = (req, res) => {
         title: "쇼핑몰site",
         logurl: "/users/logout",
         loglabel: "로그아웃",
-        reglabel: req.session.who
+        reglabel: req.session.who,
+        warn_button: "로그인하기"
       })
     );
   } else {
@@ -102,7 +104,8 @@ const MonitoringUI = (req, res) => {
         title: "알리미",
         warn_title: "로그인 필요",
         warn_message: "관리메뉴를 사용하려면 로그인이 필요합니다.",
-        return_url: "/"
+        return_url: "/users/auth/",
+        warn_button: "로그인하기"
       })
     );
   }
@@ -137,7 +140,8 @@ const systemcontrolUI = (req, res) => {
         title: "알리미",
         warn_title: "로그인 필요",
         warn_message: "관리자 메뉴를 사용하려면 로그인이 필요합니다.",
-        return_url: "/"
+        return_url: "/users/auth/",
+        warn_button: "로그인하기"
       })
     );
   }
