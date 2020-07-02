@@ -11,7 +11,7 @@ router.use(bodyParser.urlencoded({ extended: false }));
 
 
 const db = mysql.createConnection({
-  host: "localhost", // DB서버 IP주소
+  host: "192.168.0.14", // DB서버 IP주소
   user: "root", // DB접속 아이디
   password: "1234", // DB암호
   database: "greenlight" //사용할 DB명

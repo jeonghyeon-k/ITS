@@ -13,44 +13,11 @@ const io = socketio.listen(server);
 
 const mysql = require("mysql");
 const db = mysql.createConnection({
-  host: "192.168.0.14", // DB서버 IP주소
+  host: "localhost", // DB서버 IP주소
   user: "root", // DB접속 아이디
   password: "1234", // DB암호
   database: "greenlight" //사용할 DB명
 });
-
-const gpio = require("node-wiring-pi");
-//ROAD 1
-const LIGHT1 = 21;
-const LIGHT2 = 22;
-const LIGHT3 = 14;
-const LIGHT4 = 30;
-const LIGHT5 = 12; //반대로 인식
-const LIGHT6 = 13;
-
-//ROAD 2
-const LIGHT7 = 8;
-const LIGHT8 = 9;
-const LIGHT9 = 7;
-const LIGHT10 = 0;
-const LIGHT11 = 2;
-const LIGHT12 = 3;
-
-//ROAD 3
-const LIGHT13 = 10;
-const LIGHT14 = 6; //빛감지를 못함 항상 어두움
-const LIGHT15 = 4;
-const LIGHT16 = 5;
-const LIGHT17 = 16;
-const LIGHT18 = 15;
-
-//ROAD 4
-const LIGHT19 = 11;
-const LIGHT20 = 31;
-const LIGHT21 = 26;
-const LIGHT22 = 27;
-const LIGHT23 = 28;
-const LIGHT24 = 29; //작동안함
 
 let road1_1 = 0;
 let road1_2 = 0;
@@ -61,18 +28,15 @@ let road3_2 = 0;
 let road4_1 = 0;
 let road4_2 = 0;
 
-let timerid1,
-  timerid2,
-  timerid3,
-  timerid4,
-  timerid5,
-  timerid6,
-  timerid7,
-  timerid8;
-
-let Patterntime =  new Array();
-
 let pattern = new Array();
+let pattern1 = 0;
+let pattern2 = 0;
+let pattern3 = 0;
+let pattern4 = 0;
+let pattern5 = 0;
+let pattern6 = 0;
+let pattern7 = 0;
+let pattern8 = 0;
 
 const SystemerrorUI = (req, res) => {
   if (req.session.auth) {
@@ -227,6 +191,39 @@ const settime = (req, res) => {
 };
 
 const controlsignal = function(msg) {
+  const gpio = require("node-wiring-pi");
+  //ROAD 1
+  const LIGHT1 = 21;
+  const LIGHT2 = 22;
+  const LIGHT3 = 14;
+  const LIGHT4 = 30;
+  const LIGHT5 = 12; //반대로 인식
+  const LIGHT6 = 13;
+
+  //ROAD 2
+  const LIGHT7 = 8;
+  const LIGHT8 = 9;
+  const LIGHT9 = 7;
+  const LIGHT10 = 0;
+  const LIGHT11 = 2;
+  const LIGHT12 = 3;
+
+  //ROAD 3
+  const LIGHT13 = 10;
+  const LIGHT14 = 6; //빛감지를 못함 항상 어두움
+  const LIGHT15 = 4;
+  const LIGHT16 = 5;
+  const LIGHT17 = 16;
+  const LIGHT18 = 15;
+
+  //ROAD 4
+  const LIGHT19 = 11;
+  const LIGHT20 = 31;
+  const LIGHT21 = 26;
+  const LIGHT22 = 27;
+  const LIGHT23 = 28;
+  const LIGHT24 = 29; //작동안함
+
   const CheckLight1 = function() {
     let data = gpio.digitalRead(LIGHT1);
     if (!data) {
@@ -458,123 +455,11 @@ const controlsignal = function(msg) {
   };
   const CheckRoad4_2 = function() {
     let Road4_2 = CheckLight19() + CheckLight23() + CheckLight24();
+
     return Road4_2;
   };
 
-  const Patterntimer1 = function() {
-    Patterntime[0] = Patterntime[0] + 1;
-    timerid1 = setTimeout(Patterntimer1, 1000);
-  };
-
-  const Patterntimer2 = function() {
-    Patterntime[1] = Patterntime[1] + 1;
-    timerid2 = setTimeout(Patterntimer2, 1000);
-  };
-
-  const Patterntimer3 = function() {
-    Patterntime[2] = Patterntime[2] + 1;
-    timerid3 = setTimeout(Patterntimer3, 1000);
-  };
-
-  const Patterntimer4 = function() {
-    Patterntime[3] = Patterntime[3] + 1;
-    timerid4 = setTimeout(Patterntimer4, 1000);
-  };
-
-  const Patterntimer5 = function() {
-    Patterntime[4] = Patterntime[4] + 1;
-    timerid5 = setTimeout(Patterntimer5, 1000);
-  };
-
-  const Patterntimer6 = function() {
-    Patterntime[5] = Patterntime[5] + 1;
-    timerid6 = setTimeout(Patterntimer6, 1000);
-  };
-
-  const Patterntimer7 = function() {
-    Patterntime[6] = Patterntime[6] + 1;
-    timerid7 = setTimeout(Patterntimer7, 1000);
-  };
-
-  const Patterntimer8 = function() {
-    Patterntime[7] = Patterntime[7] + 1;
-    timerid8 = setTimeout(Patterntimer8, 1000);
-  };
-
-  const CheckTimer = function(
-    pattern1,
-    pattern2,
-    pattern3,
-    pattern4,
-    pattern5,
-    pattern6,
-    pattern7,
-    pattern8
-  ) {
-    if (pattern1 > 0) {
-      Patterntimer1();
-    } else {
-      clearTimeout(timerid1);
-      Patterntime[0] = 0;
-    }
-
-    if (pattern2 > 0) {
-      Patterntimer2();
-    } else {
-      clearTimeout(timerid2);
-      Patterntime[1] = 0;
-    }
-
-    if (pattern3 > 0) {
-      Patterntimer3();
-    } else {
-      clearTimeout(timerid3);
-      Patterntime[2] = 0;
-    }
-
-    if (pattern4 > 0) {
-      Patterntimer4();
-    } else {
-      clearTimeout(timerid4);
-      Patterntime[3] = 0;
-    }
-
-    if (pattern5 > 0) {
-      Patterntimer5();
-    } else {
-      clearTimeout(timerid5);
-      Patterntime[4] = 0;
-    }
-
-    if (pattern6 > 0) {
-      Patterntimer6();
-    } else {
-      clearTimeout(timerid6);
-      Patterntime[5] = 0;
-    }
-
-    if (pattern7 > 0) {
-      Patterntimer7();
-    } else {
-      clearTimeout(timerid7);
-      Patterntime[6] = 0;
-    }
-
-    if (pattern8 > 0) {
-      Patterntimer8();
-    } else {
-      clearTimeout(timerid8);
-      Patterntime[7] = 0;
-    }
-  };
-  const cleartimer = function() {
-    for(let i =0;i<8;i++){
-      Patterntime[i] = 0;
-    }
-  };
-
   var rank = new Array();
-  var rankpattern = new Array();
   const CheckLight = function() {
     road1_1 = CheckRoad1_1();
     road1_2 = CheckRoad1_2();
@@ -603,30 +488,16 @@ const controlsignal = function(msg) {
     pattern[5] = road4_1 + road4_2;
     pattern[6] = road2_2 + road4_2;
     pattern[7] = road1_2 + road3_2;
-    CheckTimer(
-      pattern[0],
-      pattern[1],
-      pattern[2],
-      pattern[3],
-      pattern[4],
-      pattern[5],
-      pattern[6],
-      pattern[7]
-    );
-
-    for(let i = 0; i<8;i++){
-      rankpattern[i] = Patterntime[i] + pattern[i];
-    }
 
     //순위 구하기
     let cnt;
     for (let i = 0; i < 8; i++) {
       cnt = 1;
-      if (rankpattern[i] == 0) {
-        rank[i] = 0; // 차량대수가 0 이면 순위도 0
+      if (pattern[i] == 0) {
+        rank[i] = 0; // 0대 이면 순위도 0
       } else {
         for (let j = 1; j < 8; j++) {
-          if (rankpattern[i] < rankpattern[j]) {
+          if (pattern[i] < pattern[j]) {
             cnt++;
           }
         }
@@ -634,10 +505,11 @@ const controlsignal = function(msg) {
       }
     }
 
-    for(let i=0;i<8;i++){
-      console.log(" 행시 "+(i+1) +" : " + pattern[0]+ " waited : "+Patterntime[i] + " rank : "+rank[i] );
+    for (let i = 0; i < 8; i++) {
+      console.log(" 행시 " + i + " : " + pattern[i]);
     }
-   
+    console.log("------------");
+
     for (let i = 0; i < 8; i++) {
       sql_str =
         "UPDATE road SET  count = " +
@@ -652,6 +524,7 @@ const controlsignal = function(msg) {
         }
       });
     }
+    console.log("pattern UPDATE 완료!!");
 
     for (let i = 0; i < 8; i++) {
       sql_str =
@@ -667,6 +540,7 @@ const controlsignal = function(msg) {
         }
       });
     }
+    console.log("light UPDATE 성공 !!");
 
     for (let i = 0; i < 8; i++) {
       sql_str =
@@ -682,10 +556,8 @@ const controlsignal = function(msg) {
         }
       });
     }
-    //console.log("rank UPDATE 성공 !!");
+    console.log("rank UPDATE 성공 !!");
 
-    cleartimer();  // 8가지 패턴들이 끝나면 시간초는 리셋 !!
-    console.log("------------");
     timeid = setTimeout(CheckLight, 3000);
   };
 
