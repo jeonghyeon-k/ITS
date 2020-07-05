@@ -70,7 +70,7 @@ let timerid1,
   timerid7,
   timerid8;
 
-let Patterntime =  new Array();
+let Patterntime = new Array();
 
 let pattern = new Array();
 
@@ -568,7 +568,7 @@ const controlsignal = function(msg) {
     }
   };
   const cleartimer = function() {
-    for(let i =0;i<8;i++){
+    for (let i = 0; i < 8; i++) {
       Patterntime[i] = 0;
     }
   };
@@ -614,7 +614,7 @@ const controlsignal = function(msg) {
       pattern[7]
     );
 
-    for(let i = 0; i<8;i++){
+    for (let i = 0; i < 8; i++) {
       rankpattern[i] = Patterntime[i] + pattern[i];
     }
 
@@ -633,11 +633,33 @@ const controlsignal = function(msg) {
         rank[i] = cnt;
       }
     }
-
-    for(let i=0;i<8;i++){
-      console.log(" 행시 "+(i+1) +" : " + pattern[0]+ " waited : "+Patterntime[i] + " rank : "+rank[i] );
+    //동점자 처리
+    for (let i = 0; i < 8; i++) {
+      let flag = 0;
+      for (let j = 0; j < 8; j++) {
+        if (rank[j] == i) {
+          if (flag == 0) {
+            flag = flag + 1;
+          } else if (flag > 0) {
+            rank[j] = rank[j] + 1;
+          }
+        }
+      }
     }
-   
+
+    for (let i = 0; i < 8; i++) {
+      console.log(
+        " 행시 " +
+          (i + 1) +
+          " : " +
+          pattern[0] +
+          " waited : " +
+          Patterntime[i] +
+          " rank : " +
+          rank[i]
+      );
+    }
+
     for (let i = 0; i < 8; i++) {
       sql_str =
         "UPDATE road SET  count = " +
@@ -684,7 +706,7 @@ const controlsignal = function(msg) {
     }
     //console.log("rank UPDATE 성공 !!");
 
-    cleartimer();  // 8가지 패턴들이 끝나면 시간초는 리셋 !!
+    cleartimer(); // 8가지 패턴들이 끝나면 시간초는 리셋 !!
     console.log("------------");
     timeid = setTimeout(CheckLight, 3000);
   };
