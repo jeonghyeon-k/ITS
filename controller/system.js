@@ -619,13 +619,12 @@ const controlsignal = function(msg) {
     }
 
     //순위 구하기
-    let cnt;
     for (let i = 0; i < 8; i++) {
-      cnt = 1;
+      let cnt = 1;
       if (rankpattern[i] == 0) {
         rank[i] = 0; // 차량대수가 0 이면 순위도 0
       } else {
-        for (let j = 1; j < 8; j++) {
+        for (let j = 0; j < 8; j++) {
           if (rankpattern[i] < rankpattern[j]) {
             cnt++;
           }
@@ -633,8 +632,9 @@ const controlsignal = function(msg) {
         rank[i] = cnt;
       }
     }
+
     //동점자 처리
-    for (let i = 0; i < 8; i++) {
+    for (let i = 1; i < 9; i++) {
       let flag = 0;
       for (let j = 0; j < 8; j++) {
         if (rank[j] == i) {
@@ -648,11 +648,51 @@ const controlsignal = function(msg) {
     }
 
     for (let i = 0; i < 8; i++) {
+      sql_str1 =
+        "UPDATE road SET  count = " +
+        pattern[i] +
+        " WHERE road_id = " +
+        (i + 1) +
+        ";";
+      //console.log("SQL: " + sql_str);
+      db.query(sql_str1, (error, results, fields) => {
+        if (error) {
+          console.log("PATTERN UPATE ERROR !!");
+        }
+      });
+      sql_str2 =
+        "UPDATE road SET lighttime = " +
+        pattern[i] +
+        " WHERE road_id = " +
+        (i + 1) +
+        ";";
+      //console.log("SQL: " + sql_str);
+      db.query(sql_str2, (error, results, fields) => {
+        if (error) {
+          console.log("light UPDATE ERROR !!");
+        }
+      });
+      sql_str3 =
+      "UPDATE road SET rank = " +
+      rank[i] +
+      " WHERE road_id = " +
+      (i + 1) +
+      ";";
+    //console.log("SQL: " + sql_str);
+    db.query(sql_str3, (error, results, fields) => {
+      if (error) {
+        console.log("rank UPDATE ERROR !!");
+      }
+    });
+    }
+    //console.log("rank UPDATE 성공 !!");
+
+    for (let i = 0; i < 8; i++) {
       console.log(
         " 행시 " +
           (i + 1) +
           " : " +
-          pattern[0] +
+          pattern[i] +
           " waited : " +
           Patterntime[i] +
           " rank : " +
@@ -660,55 +700,9 @@ const controlsignal = function(msg) {
       );
     }
 
-    for (let i = 0; i < 8; i++) {
-      sql_str =
-        "UPDATE road SET  count = " +
-        pattern[i] +
-        " WHERE road_id = " +
-        (i + 1) +
-        ";";
-      //console.log("SQL: " + sql_str);
-      db.query(sql_str, (error, results, fields) => {
-        if (error) {
-          console.log("PATTERN UPATE ERROR !!");
-        }
-      });
-    }
-
-    for (let i = 0; i < 8; i++) {
-      sql_str =
-        "UPDATE road SET lighttime = " +
-        pattern[i] +
-        " WHERE road_id = " +
-        (i + 1) +
-        ";";
-      //console.log("SQL: " + sql_str);
-      db.query(sql_str, (error, results, fields) => {
-        if (error) {
-          console.log("light UPDATE ERROR !!");
-        }
-      });
-    }
-
-    for (let i = 0; i < 8; i++) {
-      sql_str =
-        "UPDATE road SET rank = " +
-        rank[i] +
-        " WHERE road_id = " +
-        (i + 1) +
-        ";";
-      //console.log("SQL: " + sql_str);
-      db.query(sql_str, (error, results, fields) => {
-        if (error) {
-          console.log("rank UPDATE ERROR !!");
-        }
-      });
-    }
-    //console.log("rank UPDATE 성공 !!");
-
-    cleartimer(); // 8가지 패턴들이 끝나면 시간초는 리셋 !!
+    cleartimer(); // DB 업데이트가 끝나면 시간초는 리셋 !!
     console.log("------------");
-    timeid = setTimeout(CheckLight, 3000);
+    timeid = setTimeout(CheckLight, 5000);
   };
 
   if (msg == "startmsg") {
