@@ -1,9 +1,7 @@
 // require
 const express = require("express");
 const path = require("path");
-const cookieParser = require("cookie-parser");
 const session = require("express-session");
-const bodyParser = require("body-parser");
 
 const app = express();
 
@@ -12,7 +10,7 @@ const users = require('./controller/users');
 const system = require('./controller/system');
 
 const PORT = 3000;
-const URI = "http://192.168.219.177";
+const URI = "localhost:";
 
 app.set("views", path.join(__dirname, "views")); // views경로 설정
 app.set("view engine", "ejs"); // view엔진 지정
