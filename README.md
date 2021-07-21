@@ -16,11 +16,11 @@
 ### PREVIEW
 
 #### WEB
-<img src="./web.png
+<img src="./README/web.png
 " alt="drawing" width="500"/>
 
 #### HardWare - Outside
-<img src="./hardware1.png
+<img src="./README/hardware1.png
 " alt="drawing" width="500"/>
 
 <br>
